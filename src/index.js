@@ -59,7 +59,7 @@ function returnFnResult(fn) {
    console.log(f()); // выведет 12
    console.log(f()); // выведет 13
  */
-function returnCounter(number) {
+function returnCounter(number = 0) {
     return ( () => number = number + 1 );
 }
 
@@ -72,7 +72,8 @@ function returnCounter(number) {
  Пример:
    returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
  */
-function returnArgumentsArray() {
+function returnArgumentsArray(...args) {
+    return args;
 }
 
 /*
@@ -90,7 +91,12 @@ function returnArgumentsArray() {
 
    console.log(newSum()) выведет 6
  */
-function bindFunction(fn) {
+function bindFunction(fn, ...args) {
+    let bind = function() {
+        return fn(...args);
+    }
+
+    return bind;
 }
 
 export {
