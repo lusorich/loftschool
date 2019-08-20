@@ -31,7 +31,7 @@ function returnFirstArgument(a) {
    sumWithDefaults(10) вернет 110
  */
 function sumWithDefaults(a, b = 100) {
-	return a + b;
+    return a + b;
 }
 
 /*
@@ -43,7 +43,7 @@ function sumWithDefaults(a, b = 100) {
    returnFnResult(() => 'привет') вернет 'привет'
  */
 function returnFnResult(fn) {
-	return fn();
+    return fn();
 }
 
 /*
@@ -60,8 +60,8 @@ function returnFnResult(fn) {
    console.log(f()); // выведет 13
  */
 function returnCounter(number) {
-  return ( () => number = number + 1 );
-};
+    return ( () => number = number + 1 );
+}
 
 /*
  Задание 5 *:
