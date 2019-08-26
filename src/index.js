@@ -6,46 +6,27 @@
  Напишите аналог встроенного метода forEach для работы с массивами
  Посмотрите как работает forEach и повторите это поведение для массива, который будет передан в параметре array
  */
+
 function forEach(array, fn) {
-    if (!Array.isArray(array)) {
-        return 'Нужно передать массив'
-    }
-
-    if (array.length === 0) {
-        return 'Вы передали пустой массив';
-    }
-
-    if (typeof(fn) !== 'function') {
-        return 'Нужно передать функцию'
-    }
 
     for (let i = 0; i < array.length; i++) {
-        fn(array[i], i ,array);
+        fn(array[i], i, array);
     }
 }
+
 /*
  Задание 2:
 
  Напишите аналог встроенного метода map для работы с массивами
  Посмотрите как работает map и повторите это поведение для массива, который будет передан в параметре array
  */
-function map(array, fn) {
-	if (!Array.isArray(array)) {
-        return 'Нужно передать массив'
-    }
-    
-    if (array.length === 0) {
-        return 'Вы передали пустой массив';
-    }
 
-    if (typeof(fn) !== 'function') {
-      return 'Нужно передать функцию'
-    }
+function map(array, fn) {
 
     let newArray = [];
 
     for (let i = 0; i < array.length; i++) {
-        newArray.push(fn(array[i], i ,array));
+        newArray.push(fn(array[i], i, array));
     }
 
     return newArray;
@@ -57,67 +38,27 @@ function map(array, fn) {
  Напишите аналог встроенного метода reduce для работы с массивами
  Посмотрите как работает reduce и повторите это поведение для массива, который будет передан в параметре array
  */
+
 function reduce(array, fn, initial) {
-	if (!Array.isArray(array)) {
-        return 'Нужно передать массив'
-    }
-    
-    if (array.length === 0) {
-        return 'Вы передали пустой массив';
-    }
 
-    if (typeof(fn) !== 'function') {
-      return 'Нужно передать функцию'
-    }
+    let acc;
 
-    let acc = initial === undefined ? array[0] : initial;
-    let prev;
-    let current = initial === undefined ? array[1] : array[0];
+    if (initial === undefined) {
+        acc = array[0];
 
-    if ( initial === undefined) {
-    	acc = array[0];
-    	for (let i = 1; i < array.length; i++) {
-    		current = array[i];
-    		prev = acc;
-    		acc = fn(prev, current, i, array);
-    	}
+        for (let i = 1; i < array.length; i++) {
+            acc = fn(acc, array[i], i, array);
+        }
+    } else {
+        acc = initial;
+
+        for (let i = 0; i < array.length; i++) {
+            acc = fn(acc, array[i], i, array);
+        }
     }
 
-    if (initial !== undefined) {
-    	acc = initial;
-
-    	for (let i = 0; i < array.length; i++) {
-    		current = array[i];
-    		prev = acc;
-    		acc = fn(prev, current, i, array);
-    	}
-    }
-
- //   for (let i = 0; i < array.length; i++) {
- //       current = array[i];
-//
- //       if (i === 0) {
- //     	    prev = initial === undefined ? array[0] : initial;
- //       } 
- //     
- //       if (i === 1) {
- //           prev = initial === undefined ? array[0] : initial + array[0];
- //       }
-//
- //       if (i > 1) {
- //            prev = acc;
-   //     }
-//
- //       console.log(`prev is ${prev}`);
- //       console.log(`current is ${current}`);
-//
-//
- //       acc = fn(prev, current, i, array);
- //   }  
-    
     return acc;
 }
-
 
 /*
  Задание 4:
@@ -127,14 +68,18 @@ function reduce(array, fn, initial) {
  Пример:
    upperProps({ name: 'Сергей', lastName: 'Петров' }) вернет ['NAME', 'LASTNAME']
  */
+
 function upperProps(obj) {
-  let array = [];
 
-  for (var key in obj) {
-    array.push(key.toUpperCase());
-  }
+    let array = [];
 
-  return array;
+    for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            array.push(key.toUpperCase());
+        }
+    }
+
+    return array;
 }
 
 /*
@@ -145,42 +90,28 @@ function upperProps(obj) {
  */
 
 function slice(array, from = 0, to = array.length) {
-  let newArray = [];
 
-  if (from < 0 && Math.abs(from) <= array.length) {
-    from = array.length + from;
-  }
+    let newArray = [];
 
-  if (from < 0 && Math.abs(from) > array.length) {
-  	from = 0;
-  }
+    if (from < 0 && Math.abs(from) <= array.length) {
+        from = array.length + from;
+    } else if (from < 0 && Math.abs(from) > array.length) {
+        from = 0;
+    } else if (from > array.length) {
+        return [];
+    }
 
-  if (to < 0) {
-    to = array.length + to;
-  }
+    if (to < 0) {
+        to = array.length + to;
+    } else if (to > array.length) {
+        to = array.length;
+    }
 
-  if ( typeof(from) !== 'number') {
-    from = 0;
-  }
+    for (let i = from; i < to; i++) {
+        newArray.push(array[i]);
+    }
 
-  if (from > array.length) {
-    return [];
-  }
-
-  if (to > array.length) {
-  	to = array.length;
-  }
-
-  if (to < from || to === from) {
-    return [];
-  }
-
-  
-  for (let i = from; i < to; i++) {
-    newArray.push(array[i]);
-  }
-
-  return newArray;
+    return newArray;
 }
 
 /*
@@ -189,15 +120,18 @@ function slice(array, from = 0, to = array.length) {
  Функция принимает объект и должна вернуть Proxy для этого объекта
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
-//function createProxy(obj) {
-// let newObj = new Proxy(obj, {
-	//get: function(obj, prop) {
-		//if (prop in obj) {
-			//return obj[prop] * 2;
-		//}
-//	}
-//})
-//}
+function createProxy(obj) {
+
+    let newObj = new Proxy(obj, {
+        get: function(obj, prop) {
+            if (prop in obj) {
+                return Math.pow(obj[prop], 2);
+            }
+        }
+    })
+
+    return newObj;
+}
 
 export {
     forEach,
