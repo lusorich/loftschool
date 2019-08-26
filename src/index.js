@@ -70,30 +70,50 @@ function reduce(array, fn, initial) {
       return 'Нужно передать функцию'
     }
 
-    let acc = initial === undefined ? 0 : initial;
+    let acc = initial === undefined ? array[0] : initial;
     let prev;
-    let current;
+    let current = initial === undefined ? array[1] : array[0];
 
-    for (let i = 0; i < array.length; i++) {
-        current = array[i];
-        if (i === 0) {
-      	    prev = initial ? initial : array[0];
-        } 
-      
-        if (i === 1) {
-            prev = initial ? initial + array[0] : array[0];
-        }
+    if ( initial === undefined) {
+    	acc = array[0];
+    	for (let i = 1; i < array.length; i++) {
+    		current = array[i];
+    		prev = acc;
+    		acc = fn(prev, current, i, array);
+    	}
+    }
 
-        if (i > 1) {
-             prev = acc;
-        }
+    if (initial !== undefined) {
+    	acc = initial;
 
-        console.log(`prev is ${prev}`);
-        console.log(`current is ${current}`);
+    	for (let i = 0; i < array.length; i++) {
+    		current = array[i];
+    		prev = acc;
+    		acc = fn(prev, current, i, array);
+    	}
+    }
 
-
-        acc = fn(prev, current, i, array);
-    }  
+ //   for (let i = 0; i < array.length; i++) {
+ //       current = array[i];
+//
+ //       if (i === 0) {
+ //     	    prev = initial === undefined ? array[0] : initial;
+ //       } 
+ //     
+ //       if (i === 1) {
+ //           prev = initial === undefined ? array[0] : initial + array[0];
+ //       }
+//
+ //       if (i > 1) {
+ //            prev = acc;
+   //     }
+//
+ //       console.log(`prev is ${prev}`);
+ //       console.log(`current is ${current}`);
+//
+//
+ //       acc = fn(prev, current, i, array);
+ //   }  
     
     return acc;
 }
