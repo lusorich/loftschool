@@ -38,20 +38,11 @@ function map(array, fn) {
 
 function reduce(array, fn, initial) {
 
-    let acc;
+    let acc = typeof(initial) === 'undefined' ? array[0] : initial;
+    let i = typeof(initial) === 'undefined' ? 1 : 0;
 
-    if (initial === undefined) {
-        acc = array[0];
-
-        for (let i = 1; i < array.length; i++) {
-            acc = fn(acc, array[i], i, array);
-        }
-    } else {
-        acc = initial;
-
-        for (let i = 0; i < array.length; i++) {
-            acc = fn(acc, array[i], i, array);
-        }
+    for (i; i < array.length; i++) {
+        acc = fn(acc, array[i], i, array);
     }
 
     return acc;
