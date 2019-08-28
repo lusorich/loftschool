@@ -1,75 +1,4 @@
-
 /* ДЗ 3 - работа с исключениями и отладчиком */
-
-/*
- Задание 1:
-
- 1.1: Функция принимает массив и фильтрующую фукнцию и должна вернуть true или false
- Функция должна вернуть true только если fn вернула true для всех элементов массива
-
- 1.2: Необходимо выбрасывать исключение в случаях:
-   - array не массив или пустой массив (с текстом "empty array")
-   - fn не является функцией (с текстом "fn is not a function")
-
- Зарпещено использовать встроенные методы для работы с массивами
-
- Пример:
-   isAllTrue([1, 2, 3, 4, 5], n => n < 10) // вернет true
-   isAllTrue([100, 2, 3, 4, 5], n => n < 10) // вернет false
- */
-function isAllTrue(array, fn) {
-
-    if (!(array instanceof Array) || array.length === 0) {
-        throw new Error('empty array');
-    }
-    if (typeof(fn) !== 'function') {
-        throw new Error('fn is not a function');
-    }
-
-    for (let i = 0; i < array.length; i++) {
-        if (fn(array[i]) === false) {
-
-            return false;
-        }
-    }
-
-    return true;
-}
-/*
- Задание 2:
-
- 2.1: Функция принимает массив и фильтрующую фукнцию и должна вернуть true или false
- Функция должна вернуть true если fn вернула true хотя бы для одного из элементов массива
-
- 2.2: Необходимо выбрасывать исключение в случаях:
-   - array не массив или пустой массив (с текстом "empty array")
-   - fn не является функцией (с текстом "fn is not a function")
-
- Зарпещено использовать встроенные методы для работы с массивами
-
- Пример:
-   isSomeTrue([1, 2, 30, 4, 5], n => n > 20) // вернет true
-   isSomeTrue([1, 2, 3, 4, 5], n => n > 20) // вернет false
- */
-function isSomeTrue(array, fn) {
-
-    if (!(array instanceof Array) || array.length === 0) {
-        throw new Error('empty array');
-    }
-    if (typeof(fn) !== 'function') {
-        throw new Error('fn is not a function');
-    }
-
-    for (let i = 0; i < array.length; i++) {
-        if (fn(array[i]) === true) {
-
-            return true;
-        }
-    }
-
-    return false;
-
-/* ДЗ 2 - работа с массивами и объектами */
 
 /*
  Задание 1:
@@ -151,24 +80,6 @@ function isSomeTrue(array, fn) {
  3.3: Необходимо выбрасывать исключение в случаях:
    - fn не является функцией (с текстом "fn is not a function")
  */
-function returnBadArguments(fn) {
-
-    if (typeof(fn) !== 'function') {
-        throw new Error('fn is not a function');
-    }
-
-    let arrayErrors = [];
-    
-    for (let i = 1; i < arguments.length; i++) {
-        try { 
-            fn(arguments[i]);
-        } catch (e) {
-            arrayErrors.push(arguments[i]);
-        }
-    }
-
-    return arrayErrors;
-
 function returnBadArguments(fn) {
 
     if (typeof(fn) !== 'function') {
