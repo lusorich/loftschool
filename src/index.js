@@ -18,8 +18,6 @@
  */
 function isAllTrue(array, fn) {
 
-    let isTrue = true;
-
     if (!(array instanceof Array) || array.length === 0) {
         throw new Error('empty array');
     }
@@ -30,11 +28,11 @@ function isAllTrue(array, fn) {
     for (let i = 0; i < array.length; i++) {
         if (fn(array[i]) === false) {
 
-            return isTrue = false;
+            return false;
         }
     }
 
-    return isTrue;
+    return true;
 }
 /*
  Задание 2:
@@ -53,7 +51,6 @@ function isAllTrue(array, fn) {
    isSomeTrue([1, 2, 3, 4, 5], n => n > 20) // вернет false
  */
 function isSomeTrue(array, fn) {
-    let isTrue = false;
 
     if (!(array instanceof Array) || array.length === 0) {
         throw new Error('empty array');
@@ -65,11 +62,11 @@ function isSomeTrue(array, fn) {
     for (let i = 0; i < array.length; i++) {
         if (fn(array[i]) === true) {
 
-            return isTrue = true;
+            return true;
         }
     }
 
-    return isTrue;
+    return false;
 }
 
 /*
@@ -90,17 +87,14 @@ function returnBadArguments(fn) {
     }
 
     let arrayErrors = [];
-    let args = [...arguments];
-
-    args.splice(0, 1);
-
-    args.forEach(function(argument) {
+    
+    for (let i = 1; i < arguments.length; i++) {
         try { 
-            fn(argument);
+            fn(arguments[i]);
         } catch (e) {
-            arrayErrors.push(argument);
+            arrayErrors.push(arguments[i]);
         }
-    })
+    }
 
     return arrayErrors;
 }
