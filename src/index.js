@@ -122,50 +122,47 @@ function calculator(number = 0) {
         throw new Error('number is not a number');
     }
 
+    function fn(op, args) {
+        for (let i = 0; i < args.length; i++) {
+            switch (op) {
+                case '+':
+                    number += args[i];
+                    break;
+                case '-':
+                    number -= args[i];
+                    break;
+                case '/':
+                    if (args[i] === 0) {
+                        throw new Error('division by 0');
+                    }
+                    number /= args[i];
+                    break;
+                case '*':
+                    number *= args[i];
+                    break;
+            }
+        }
+
+        return number;
+    }
     let obj = {
-        sum() {
-            let result = number;
+        [fn]: fn,
 
-            for (let i = 0; i < arguments.length; i++) {
+        sum(...args) {
 
-                result += arguments[i];
-            }
-
-            return result;
+            return fn('+', args);
         },
-        dif() {
-            let result = number;
+        dif(...args) {
 
-            for (let i = 0; i < arguments.length; i++) {
-
-                result -= arguments[i];
-            }
-
-            return result;
+            return fn('-', args);
         },
-        div() {
-            let result = number;
+        div(...args) {
 
-            for (let i = 0; i < arguments.length; i++) {
-
-                if (arguments[i] === 0) {
-                    throw new Error('division by 0');
-                }
-
-                result /= arguments[i];
-            }
-
-            return result;
+            return fn('/', args);
         },
-        mul() {
-            let result = number;
+        mul(...args) {
 
-            for (let i = 0; i < arguments.length; i++) {
-
-                result *= arguments[i];
-            }
-
-            return result;
+            return fn('*', args);
         }
     }
 
