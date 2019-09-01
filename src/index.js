@@ -53,9 +53,10 @@ function prepend(what, where) {
  */
 function findAllPSiblings(where) {
     let array = [];
+
     for (let node of where.children) {
         if (node.tagName === 'P') {
-            array.push(node.nextSibling.tagName);
+            array.push(node.previousElementSibling);
         } 
     }
 
@@ -79,16 +80,15 @@ function findAllPSiblings(where) {
 
    findError(document.body) // функция должна вернуть массив с элементами 'привет' и 'loftschool'
  */
-/*  function findError(where) {
+function findError(where) {
     var result = [];
 
-    for (var child of where.childNodes) {
+    for (var child of where.children) {
         result.push(child.innerText);
     }
 
     return result;
-  }
-*/
+}
 
 /*
  Задание 5:
@@ -180,8 +180,8 @@ function findAllPSiblings(where) {
 export {
     createDivWithText,
     prepend,
-    findAllPSiblings
-//    findError,
+    findAllPSiblings,
+    findError
 //    deleteTextNodes,
 //    deleteTextNodesRecursive,
 //    collectDOMStat,
