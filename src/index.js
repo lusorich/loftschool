@@ -15,8 +15,6 @@ function createDivWithText(text) {
     let div = document.createElement('div');
 
     div.textContent = text;
-
-    return div;
 }
 
 /*
@@ -102,8 +100,13 @@ function findError(where) {
    После выполнения функции, дерево <div></div>привет<p></p>loftchool!!!
    должно быть преобразовано в <div></div><p></p>
  */
-//  function deleteTextNodes(where) {
-//  }
+function deleteTextNodes(where) {
+    for (let child of where.childNodes) {
+        if (child.nodeType === 3) {
+            child.remove(child);
+        }
+    }
+}
 
 /*
  Задание 6:
@@ -181,8 +184,8 @@ export {
     createDivWithText,
     prepend,
     findAllPSiblings,
-    findError
-//    deleteTextNodes,
+    findError,
+    deleteTextNodes
 //    deleteTextNodesRecursive,
 //    collectDOMStat,
 //    observeChildNodes
