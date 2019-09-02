@@ -103,7 +103,7 @@ function findError(where) {
 function deleteTextNodes(where) {
     for (let child of where.childNodes) {
         if (child.nodeType === 3) {
-            child.remove(child);
+            child.remove();
         }
     }
 }
@@ -119,8 +119,17 @@ function deleteTextNodes(where) {
    После выполнения функции, дерево <span> <div> <b>привет</b> </div> <p>loftchool</p> !!!</span>
    должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
-//  function deleteTextNodesRecursive(where) {
-//  }
+function deleteTextNodesRecursive(where) {
+
+    for (let child of where.childNodes) {
+        console.log(child);
+        if (child.nodeType === 3) {
+            child.remove();
+        } else if (child.childNodes.length > 0) {
+            deleteTextNodesRecursive(child);
+        }
+    } 
+}
 
 /*
  Задание 7 *:
@@ -185,8 +194,8 @@ export {
     prepend,
     findAllPSiblings,
     findError,
-    deleteTextNodes
-//    deleteTextNodesRecursive,
+    deleteTextNodes,
+    deleteTextNodesRecursive
 //    collectDOMStat,
 //    observeChildNodes
 };
