@@ -121,14 +121,15 @@ function deleteTextNodes(where) {
  */
 function deleteTextNodesRecursive(where) {
 
-    for (let child of where.childNodes) {
-        console.log(child);
-        if (child.nodeType === 3) {
-            child.remove();
-        } else if (child.childNodes.length > 0) {
-            deleteTextNodesRecursive(child);
+    for (let i = 0; i < where.childNodes.length; i++) {
+
+        if (where.childNodes[i].nodeType === 3) {
+            where.childNodes[i].remove();
+            i--;
+        } else if (where.childNodes[i].childNodes.length > 0 && where.childNodes[i].nodeType === 1) {
+            deleteTextNodesRecursive(where.childNodes[i]);
         }
-    } 
+    }
 }
 
 /*
