@@ -1,179 +1,78 @@
-/* ДЗ 3 - работа с исключениями и отладчиком */
+/* ДЗ 5 - DOM Events */
 
 /*
  Задание 1:
 
- 1.1: Функция принимает массив и фильтрующую фукнцию и должна вернуть true или false
- Функция должна вернуть true только если fn вернула true для всех элементов массива
-
- 1.2: Необходимо выбрасывать исключение в случаях:
-   - array не массив или пустой массив (с текстом "empty array")
-   - fn не является функцией (с текстом "fn is not a function")
-
- Зарпещено использовать встроенные методы для работы с массивами
+ Функция должна добавлять обработчик fn события eventName к элементу target
 
  Пример:
-   isAllTrue([1, 2, 3, 4, 5], n => n < 10) // вернет true
-   isAllTrue([100, 2, 3, 4, 5], n => n < 10) // вернет false
+   addListener('click', document.querySelector('a'), () => console.log('...')) // должна добавить указанный обработчик кликов на указанный элемент
  */
-function isAllTrue(array, fn) {
-
-    if (!(array instanceof Array) || array.length === 0) {
-        throw new Error('empty array');
-    }
-    if (typeof(fn) !== 'function') {
-        throw new Error('fn is not a function');
-    }
-
-    for (let i = 0; i < array.length; i++) {
-        if (fn(array[i]) === false) {
-
-            return false;
-        }
-    }
-
-    return true;
+function addListener(eventName, target, fn) {
 }
 
 /*
  Задание 2:
 
- 2.1: Функция принимает массив и фильтрующую фукнцию и должна вернуть true или false
- Функция должна вернуть true если fn вернула true хотя бы для одного из элементов массива
-
- 2.2: Необходимо выбрасывать исключение в случаях:
-   - array не массив или пустой массив (с текстом "empty array")
-   - fn не является функцией (с текстом "fn is not a function")
-
- Зарпещено использовать встроенные методы для работы с массивами
+ Функция должна удалять у элемента target обработчик fn события eventName
 
  Пример:
-   isSomeTrue([1, 2, 30, 4, 5], n => n > 20) // вернет true
-   isSomeTrue([1, 2, 3, 4, 5], n => n > 20) // вернет false
+   removeListener('click', document.querySelector('a'), someHandler) // должна удалить указанный обработчик кликов на указанный элемент
  */
-function isSomeTrue(array, fn) {
-
-    if (!(array instanceof Array) || array.length === 0) {
-        throw new Error('empty array');
-    }
-    if (typeof(fn) !== 'function') {
-        throw new Error('fn is not a function');
-    }
-
-    for (let i = 0; i < array.length; i++) {
-        if (fn(array[i]) === true) {
-
-            return true;
-        }
-    }
-
-    return false;
+function removeListener(eventName, target, fn) {
 }
+
 /*
  Задание 3:
 
- 3.1: Функция принимает заранее неизветсное количество аргументов, первым из которых является функция fn
- Функция должна поочередно запустить fn для каждого переданного аргумента (кроме самой fn)
+ Функция должна добавить к элементу target такой обработчик на события eventName, чтобы он отменял действия по умолчанию
 
- 3.2: Функция должна вернуть массив аргументов, для которых fn выбросила исключение
-
- 3.3: Необходимо выбрасывать исключение в случаях:
-   - fn не является функцией (с текстом "fn is not a function")
+ Пример:
+   skipDefault('click', document.querySelector('a')) // после вызова функции, клики на указанную ссылку не должны приводить к переходу на другую страницу
  */
-function returnBadArguments(fn) {
-
-    if (typeof(fn) !== 'function') {
-        throw new Error('fn is not a function');
-    }
-
-    let arrayErrors = [];
-
-    for (let i = 1; i < arguments.length; i++) {
-        try { 
-            fn(arguments[i]);
-        } catch (e) {
-            arrayErrors.push(arguments[i]);
-        }
-    }
-
-    return arrayErrors;
+function skipDefault(eventName, target) {
 }
 
 /*
  Задание 4:
 
- 4.1: Функция имеет параметр number (по умолчанию - 0)
+ Функция должна эмулировать событие click для элемента target
 
- 4.2: Функция должна вернуть объект, у которого должно быть несколько методов:
-   - sum - складывает number с переданными аргументами
-   - dif - вычитает из number переданные аргументы
-   - div - делит number на первый аргумент. Результат делится на следующий аргумент (если передан) и так далее
-   - mul - умножает number на первый аргумент. Результат умножается на следующий аргумент (если передан) и так далее
-
- Количество передаваемых в методы аргументов заранее неизвестно
-
- 4.3: Необходимо выбрасывать исключение в случаях:
-   - number не является числом (с текстом "number is not a number")
-   - какой-либо из аргументов div является нулем (с текстом "division by 0")
+ Пример:
+   emulateClick(document.querySelector('a')) // для указанного элемента должно быть сэмулировано события click
  */
-function calculator(number = 0) {
-
-    if (typeof(number) !== 'number') {
-        throw new Error('number is not a number');
-    }
-
-    function fn(op, args) {
-        for (let i = 0; i < args.length; i++) {
-            switch (op) {
-                case '+':
-                    number += args[i];
-                    break;
-                case '-':
-                    number -= args[i];
-                    break;
-                case '/':
-                    if (args[i] === 0) {
-                        throw new Error('division by 0');
-                    }
-                    number /= args[i];
-                    break;
-                case '*':
-                    number *= args[i];
-                    break;
-            }
-        }
-
-        return number;
-    }
-    let obj = {
-        [fn]: fn,
-
-        sum(...args) {
-
-            return fn('+', args);
-        },
-        dif(...args) {
-
-            return fn('-', args);
-        },
-        div(...args) {
-
-            return fn('/', args);
-        },
-        mul(...args) {
-
-            return fn('*', args);
-        }
-    }
-
-    return obj;
+function emulateClick(target) {
 }
 
-/* При решении задач, пострайтесь использовать отладчик */
+/*
+ Задание 5:
+
+ Функция должна добавить такой обработчик кликов к элементу target,
+ который реагирует (вызывает fn) только на клики по элементам BUTTON внутри target
+
+ Пример:
+   delegate(document.body, () => console.log('кликнули на button')) // добавит такой обработчик кликов для body, который будет вызывать указанную функцию только если кликнули на кнопку (элемент с тегом button)
+ */
+function delegate(target, fn) {
+}
+
+/*
+ Задание 6:
+
+ Функция должна добавить такой обработчик кликов к элементу target,
+ который сработает только один раз и удалится (перестанет срабатывать для последующих кликов по указанному элементу)
+
+ Пример:
+   once(document.querySelector('button'), () => console.log('обработчик выполнился!')) // добавит такой обработчик кликов для указанного элемента, который вызовется только один раз и затем удалится
+ */
+function once(target, fn) {
+}
 
 export {
-    isAllTrue,
-    isSomeTrue,
-    returnBadArguments,
-    calculator
+    addListener,
+    removeListener,
+    skipDefault,
+    emulateClick,
+    delegate,
+    once
 };
