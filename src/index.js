@@ -51,9 +51,7 @@ function skipDefault(eventName, target) {
  */
 function emulateClick(target) {
 
-    let event = new Event('click');
-
-    target.dispatchEvent(event);
+    target.dispatchEvent(new Event('click'));
 }
 
 /*
