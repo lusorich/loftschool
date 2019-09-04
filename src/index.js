@@ -159,8 +159,57 @@ function deleteTextNodesRecursive(where) {
      texts: 3
    }
  */
-//  function collectDOMStat(root) {
-//  }
+function collectDOMStat(root) {
+
+    let stat = {
+        tags: {},
+        classes: {},
+        texts: 0,
+    };
+
+    function nodesRecursive(root) {
+
+        for (let i = 0; i < root.childNodes.length; i++) {
+
+            let child = root.childNodes[i];
+            let childNodeName = child.nodeName;
+            
+            if (child.nodeType === 1) {
+
+                if (stat.tags.hasOwnProperty(childNodeName)) {
+
+                    stat.tags[childNodeName]++;
+                } else {
+
+                    stat.tags[childNodeName] = 1;
+                }
+                for (let i = 0; i < child.classList.length; i++) {
+
+                    let childClassName = child.classList[i];
+                    
+                    if (stat.classes.hasOwnProperty(childClassName)) {
+
+                        stat.classes[childClassName]++;
+                    } else {
+
+                        stat.classes[childClassName] = 1;
+                    }
+                }
+
+            } else if (child.nodeType === 3) {
+                stat.texts++;
+            }
+
+            if (child.childNodes.length > 0 && child.nodeType === 1) {
+                nodesRecursive(child);
+            }
+        }
+    }
+    
+    nodesRecursive(root);
+
+    return stat;
+}
 
 /*
  Задание 8 *:
@@ -203,7 +252,7 @@ export {
     findAllPSiblings,
     findError,
     deleteTextNodes,
-    deleteTextNodesRecursive
-//    collectDOMStat,
-//    observeChildNodes
+    deleteTextNodesRecursive,
+    collectDOMStat,
+    observeChildNodes
 };
