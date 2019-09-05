@@ -243,8 +243,36 @@ function collectDOMStat(root) {
      nodes: [div]
    }
  */
-//  function observeChildNodes(where, fn) {
-//  }
+function observeChildNodes(where, fn) {
+
+    let obj = {
+        nodes: [],
+    };
+
+    let observer = new MutationObserver( (mutationRecords) => {
+        mutationRecords.forEach((mutationRecord) => {
+            if (mutationRecord.addedNodes) {
+                obj.type = 'insert';
+                obj.nodes.push(mutationRecord.addedNodes[0]);
+
+                fn(obj);
+            }
+            if (mutationRecord.removedNodes) {
+                obj.type = 'remove';
+                obj.nodes.push(mutationRecord.removedNodes[0]);
+
+                fn(obj);
+            }
+        })
+    });
+
+    observer.observe(where, {
+        childList: true,
+        subtree: true,
+        characterDataOldValue: false,
+        characterData: false
+    });
+}
 
 export {
     createDivWithText,
