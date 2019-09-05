@@ -250,13 +250,16 @@ function observeChildNodes(where, fn) {
     };
 
     let observer = new MutationObserver( (mutationRecords) => {
+
         mutationRecords.forEach((mutationRecord) => {
+
             if (mutationRecord.addedNodes) {
                 obj.type = 'insert';
                 obj.nodes.push(mutationRecord.addedNodes[0]);
 
                 fn(obj);
             }
+
             if (mutationRecord.removedNodes) {
                 obj.type = 'remove';
                 obj.nodes.push(mutationRecord.removedNodes[0]);
