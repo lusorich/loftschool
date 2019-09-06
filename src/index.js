@@ -253,16 +253,20 @@ function observeChildNodes(where, fn) {
 
         mutationRecords.forEach((mutationRecord) => {
 
-            if (mutationRecord.addedNodes) {
+            if (mutationRecord.addedNodes.length) {
                 obj.type = 'insert';
-                obj.nodes.push(mutationRecord.addedNodes[0]);
+
+                for (let i = 0; i < mutationRecord.addedNodes.length; i++) {
+                    obj.nodes.push(mutationRecord.addedNodes[i]);
+                }
 
                 fn(obj);
-            }
-
-            if (mutationRecord.removedNodes) {
+            } else if (mutationRecord.removedNodes.length) {
                 obj.type = 'remove';
-                obj.nodes.push(mutationRecord.removedNodes[0]);
+
+                for (let i = 0; i < mutationRecord.removedNodes.length; i++) {
+                    obj.nodes.push(mutationRecord.removedNodes[i]);
+                }
 
                 fn(obj);
             }
