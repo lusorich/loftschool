@@ -37,7 +37,8 @@ const homeworkContainer = document.querySelector('#homework-container');
  https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json
  */
 function loadTowns() {
-	const xhr = new XMLHttpRequest();
+
+	  const xhr = new XMLHttpRequest();
 
     xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
     xhr.send();
@@ -78,6 +79,11 @@ function loadTowns() {
    isMatching('Moscow', 'Moscov') // false
  */
 function isMatching(full, chunk) {
+
+    full = full.toUpperCase();
+    chunk = chunk.toUpperCase();
+
+    return full.includes(chunk);
 }
 
 /* Блок с надписью "Загрузка" */
