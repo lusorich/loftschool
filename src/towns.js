@@ -38,7 +38,7 @@ const homeworkContainer = document.querySelector('#homework-container');
  */
 function loadTowns() {
 
-	  const xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
 
     xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
     xhr.send();
@@ -86,6 +86,7 @@ function isMatching(full, chunk) {
     return full.includes(chunk);
 }
 
+let userString = '';
 /* Блок с надписью "Загрузка" */
 const loadingBlock = homeworkContainer.querySelector('#loading-block');
 /* Блок с текстовым полем и результатом поиска */
@@ -95,8 +96,50 @@ const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
 const filterResult = homeworkContainer.querySelector('#filter-result');
 
-filterInput.addEventListener('keyup', function() {
-    // это обработчик нажатия кливиш в текстовом поле
+filterInput.addEventListener('keyup', function(event) {
+
+    function createDiv(text) {
+		let div = document.createElement('div');
+
+		div.textContent = text;
+
+		return div;
+    }
+
+    let key = event.keyCode;
+
+    if ( key >= 65 && key <= 90) {
+        userString += event.key;
+    } else if (key === 8) {
+        userString = userString.slice(0, userString.length - 1);
+    } else if (key >= 37 && key <= 40) {
+        event.preventDefault();
+    }
+    else { filterInput.value = filterInput.value.slice(0, filterInput.value.length - 1); }
+    
+    
+
+	loadTowns()
+        .then( result => {
+
+            while (filterResult.firstChild) {
+                filterResult.removeChild(filterResult.firstChild);
+            }
+
+            if (userString.length !== 0) {
+            result.forEach( (citie) => {
+    	        if ( isMatching(citie.name, userString) ) {
+                    filterResult.appendChild(createDiv(citie.name));                    
+                }
+                if (filterInput.value === '') {
+                    while (filterResult.firstChild) {
+                        filterResult.removeChild(filterResult.firstChild);
+                    }
+                }
+            });
+         }
+        })
+    
 });
 
 export {
