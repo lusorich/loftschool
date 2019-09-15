@@ -45,70 +45,84 @@ const listTable = homeworkContainer.querySelector('#list-table tbody');
 
 function createCell(cookies) {
 
-   while (listTable.firstChild) {
+    while (listTable.firstChild) {
         listTable.removeChild(listTable.firstChild);
     }
 
-    cookies.forEach((cookie) => {
 
-    if (document.cookie.length !== 0) {
-      for (key in cookie) {
+    for (key in cookies) {
         tr = document.createElement('tr');
         listTable.appendChild(tr);
         tr.appendChild(document.createElement('td')).textContent = key;
-        tr.appendChild(document.createElement('td')).textContent = cookie[key];
+        tr.appendChild(document.createElement('td')).textContent = cookies[key];
         let deleteCell = document.createElement('td');
-          deleteCell.className = 'delete';
-          deleteCell.textContent = 'удалить';
+        deleteCell.className = 'delete';
+        deleteCell.textContent = 'удалить';
         tr.appendChild(deleteCell);
-      }
     }
-    })
 }
 
 //функция для получения массива со всеми куками
 function getCookies() {
 
-  let cookies = [];
+    let cookies;
 
-  cookies.push(document.cookie.split('; ').reduce((prev, current) => {
-      let [name, value] = current.split('=');
-      prev[name] = value;
-      return prev;
-    }, {}));
+    cookies = document.cookie.split('; ').reduce((prev, current) => {
+        let [name, value] = current.split('=');
+        prev[name] = value;
+        return prev;
+    }, {});
 
-  return cookies;
+    return cookies;
 }
 
 //отображаем все куки после загрузки страницы
 window.addEventListener('load', function() {
 
-  createCell(getCookies());
+    createCell(getCookies());
 });
 
+function isMatching(full, chunk) {
+
+    full = full.toUpperCase();
+    chunk = chunk.toUpperCase();
+
+    return full.includes(chunk);
+}
+
+let userString = '';
+let cookies = getCookies();
 
 filterNameInput.addEventListener('keyup', function() {
 
-    if (filterNameInput.value.length === 0) {
-      createCell(getCookies());
+    for (key in cookies) {
+        if (isMatching(cookies[key], filterNameInput.value) || isMatching(key, filterNameInput.value)) {
+            tr = document.createElement('tr');
+            listTable.appendChild(tr);
+            tr.appendChild(document.createElement('td')).textContent = key;
+            tr.appendChild(document.createElement('td')).textContent = cookies[key];
+            let deleteCell = document.createElement('td');
+            deleteCell.className = 'delete';
+            deleteCell.textContent = 'удалить';
+            tr.appendChild(deleteCell);;
+        } else {
+            while (listTable.firstChild) {
+                listTable.removeChild(listTable.firstChild);
+            }
+        }
     }
 });
 
 
-
 addButton.addEventListener('click', () => {
 
-    let cookies = getCookies();
+    let cookie = getCookies();
 
-    cookies.forEach((cookie) => {
-
-      for (key in cookie) {
-          if (key === addNameInput.value) {
-              cookie[key] = addValueInput.value;
-          }
-      }
-
-    });
+    for (key in cookies) {
+        if (key === addNameInput.value) {
+            cookie[key] = addValueInput.value;
+        }
+    }
 
 
     document.cookie = `${addNameInput.value}=${addValueInput.value}`;
