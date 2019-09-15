@@ -36,23 +36,24 @@ const homeworkContainer = document.querySelector('#homework-container');
  Массив городов пожно получить отправив асинхронный запрос по адресу
  https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json
  */
+
+function compare(a, b) {
+
+    if (a.name < b.name) {
+        return -1;
+    }
+    if (a.name > b.name) {
+        return 1;
+    }
+
+    return 0;
+}
+
 function loadTowns() {
     const xhr = new XMLHttpRequest();
 
     xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
     xhr.send();
-
-    function compare(a, b) {
-
-        if (a.name < b.name) {
-            return -1;
-        }
-        if (a.name > b.name) {
-            return 1;
-        }
-
-        return 0;
-    }
 
     return new Promise((resolve, reject) => {
 
@@ -128,18 +129,19 @@ loadTowns()
         loadingBlock.appendChild(repeat);
     });
 
+function createDiv(text) {
+    
+    let div = document.createElement('div');
+
+    div.textContent = text;
+
+    return div;
+}
+
 filterInput.addEventListener('keyup', function(event) {
 
-    function createDiv(text) {
-        let div = document.createElement('div');
-
-        div.textContent = text;
-
-        return div;
-    }
-
     let key = event.keyCode;
-    
+
     if (key === 8) {
         filterInput.value = filterInput.value.slice(0, filterInput.value.length - 1);
     }
