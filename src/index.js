@@ -1,3 +1,4 @@
+
 /* ДЗ 6 - Асинхронность и работа с сетью */
 
 /*
@@ -63,3 +64,4 @@ export {
     delayPromise,
     loadAndSortTowns
 };
+
