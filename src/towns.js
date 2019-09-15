@@ -37,7 +37,6 @@ const homeworkContainer = document.querySelector('#homework-container');
  https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json
  */
 function loadTowns() {
-
     const xhr = new XMLHttpRequest();
 
     xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
@@ -55,16 +54,30 @@ function loadTowns() {
         return 0;
     }
 
-    return new Promise( (resolve) => {
+    return new Promise((resolve, reject) => {
+
+        xhr.addEventListener('onload', () => {
+
+            loadingBlock.style.display = 'block;';
+        })
 
         xhr.addEventListener('load', () => {
+
+            if (xhr.status >= 400) {
+                loadingBlock.style.display = 'block;';
+
+                return reject();
+            }
+
+            loadingBlock.style.display = 'none';
+            filterBlock.style.display = 'block';
 
             let response = JSON.parse(xhr.responseText);
 
             response.sort(compare);
             resolve(response);
         });
-    }); 
+    });
 }
 
 /*
@@ -86,7 +99,6 @@ function isMatching(full, chunk) {
     return full.includes(chunk);
 }
 
-let userString = '';
 /* Блок с надписью "Загрузка" */
 const loadingBlock = homeworkContainer.querySelector('#loading-block');
 /* Блок с текстовым полем и результатом поиска */
@@ -96,50 +108,62 @@ const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
 const filterResult = homeworkContainer.querySelector('#filter-result');
 
+loadTowns()
+    .catch(() => {
+
+        let repeat = document.createElement('button');
+
+        repeat.textContent = 'Повторить';
+
+        repeat.addEventListener('click', function(event) {
+            event.preventDefault();
+            loadTowns().catch(() => {
+
+                loadingBlock.textContent = 'Не удалось загрузить города';
+                loadingBlock.appendChild(repeat);
+            });
+        });
+
+        loadingBlock.textContent = 'Не удалось загрузить города';
+        loadingBlock.appendChild(repeat);
+    });
+
 filterInput.addEventListener('keyup', function(event) {
 
     function createDiv(text) {
-		let div = document.createElement('div');
+        let div = document.createElement('div');
 
-		div.textContent = text;
+        div.textContent = text;
 
-		return div;
+        return div;
     }
 
     let key = event.keyCode;
-
-    if ( key >= 65 && key <= 90) {
-        userString += event.key;
-    } else if (key === 8) {
-        userString = userString.slice(0, userString.length - 1);
-    } else if (key >= 37 && key <= 40) {
-        event.preventDefault();
+    
+    if (key === 8) {
+        filterInput.value = filterInput.value.slice(0, filterInput.value.length - 1);
     }
-    else { filterInput.value = filterInput.value.slice(0, filterInput.value.length - 1); }
-    
-    
 
-	loadTowns()
-        .then( result => {
+    loadTowns()
+        .then(result => {
 
             while (filterResult.firstChild) {
                 filterResult.removeChild(filterResult.firstChild);
             }
 
-            if (userString.length !== 0) {
-            result.forEach( (citie) => {
-    	        if ( isMatching(citie.name, userString) ) {
-                    filterResult.appendChild(createDiv(citie.name));                    
-                }
+            if (filterInput.value !== 0) {
+                result.forEach((citie) => {
+                    if (isMatching(citie.name, filterInput.value)) {
+                        filterResult.appendChild(createDiv(citie.name));
+                    }
+                });
                 if (filterInput.value === '') {
                     while (filterResult.firstChild) {
                         filterResult.removeChild(filterResult.firstChild);
                     }
                 }
-            });
-         }
+            }
         })
-    
 });
 
 export {
