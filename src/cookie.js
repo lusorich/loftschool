@@ -44,12 +44,12 @@ const addButton = homeworkContainer.querySelector('#add-button');
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
 function createCell(cookies) {
-    if (document.cookie === '') {
-        return '';
-    }
-
     while (listTable.firstChild) {
         listTable.removeChild(listTable.firstChild);
+    }
+
+    if (document.cookie === '') {
+        return '';
     }
 
     for (let key in cookies) {
@@ -103,17 +103,18 @@ let cookies = getCookies();
 
 filterNameInput.addEventListener('keyup', function() {
 
-    while (listTable.firstChild) {
-        listTable.removeChild(listTable.firstChild);
-    }
 
     if (filterNameInput.value === '') {
         createCell(getCookies());
     }
 
+    while (listTable.firstChild) {
+        listTable.removeChild(listTable.firstChild);
+    }
+
     for (let key in cookies) {
 
-        if (isMatching(cookies[`${key}`], filterNameInput.value) || isMatching(`${key}`, filterNameInput.value)) {
+        if (isMatching(cookies[key], filterNameInput.value) || isMatching(`${key}`, filterNameInput.value)) {
             let tr = document.createElement('tr');
             let deleteCell = document.createElement('td');
 
@@ -124,8 +125,8 @@ filterNameInput.addEventListener('keyup', function() {
             deleteCell.textContent = 'удалить';
             tr.appendChild(deleteCell);
         }
-  }
-    
+    }
+
 });
 
 
